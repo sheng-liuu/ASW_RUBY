@@ -1,24 +1,12 @@
-# README
+Primer Lliurament Projecte
+Students:
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Andrango, Oliver Uriel
 
-Things you may want to cover:
+Alfaro, Sheida
 
-* Ruby version
+Liu, Sheng
 
-* System dependencies
+Viñets, Ariadna
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Our webapp @ Heroku: http://hackernews12c.herokuapp.com
