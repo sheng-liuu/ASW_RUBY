@@ -1,0 +1,81 @@
+<html op="submit">
+  <head>
+    <title>Submit | Hacker News</title>
+  </head>
+<body>
+  <center>
+    
+    <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+      <tr>
+        <td bgcolor="#ff6600">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td style="width:18px;padding-right:4px;line-height:1px">
+                <a href=<%= root_path%>>
+                  <%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%>
+                </a>
+              </td>
+              <td style="line-height:12pt; height:10px;line-height:1px">
+                <span class="pagetop"><b>Submit</b></span>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr style="height:10px"></tr>
+        <tr>
+          <td>
+            <form method="post" action="/contributions">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                <table border="0">
+                  <tr>
+                      <% if !notice.nil? || !alert.nil? %>
+                        <span style="color: grey;"><%= notice %></span>
+                        <span style="color: red;"><%= alert %></span>
+                      <% end %>
+                  </tr>
+                  <tr>
+                    <td><font color="grey">title</font></td>
+                    <td>
+                      <input type="text" name="contribution[title]" id="title" size="50">
+                      <span style="margin-left:10px"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><font color="grey">url</font></td>
+                    <td><input type="text" name="contribution[url]" id="url"size="50"></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td><font color="grey"><b>or</b></font></td>
+                  </tr>
+                  <tr>
+                    <td><font color="grey">text</font></td>
+                    <td><textarea name="contribution[text]" rows="4" cols="49"></textarea>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><input name="contribution[user_id]" style="display: none" value="<%= current_user.id %>"></input></td>
+                    <td><input type="submit" name="commit" value="submit"></td>
+                  </tr>
+                  <tr style="height:20px"></tr>
+                  <tr>
+                    <td></td>
+                    <td><font color="grey">Leave url blank to submit a question for discussion. If there is no url, the text (if any) will appear at the top of the thread.</font>
+                      <br><br>
+                      <font color="grey">You can also submit via</font>
+                      <a href="bookmarklet.html" rel="nofollow"><u>bookmarklet</u></a>.
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </center>
+    </body>
+</html>

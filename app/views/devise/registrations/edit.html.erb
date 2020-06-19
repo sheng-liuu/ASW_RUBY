@@ -1,0 +1,133 @@
+<body>
+    <center>
+      <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+          <td bgcolor="#ff6600">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+              <tr>
+                <td style="width:18px;padding-right:4px">
+                  <a href="<% root_path%>"> <%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%></a>
+                </td>
+                <td style="line-height:12pt; height:10px;">
+                  <span class="pagetop">
+                    <b><a><%= link_to 'Hacker News', contributions_path, class:"btn btn-default"%></a></b>
+                    <a> <%= link_to 'new', newest_path, class:"btn btn-default"%></a>
+                    | <a href="threads?id=shengliu">threads</a> 
+                    | <a href="front">past</a> 
+                    | <a><%= link_to 'ask', ask_path, class:"btn btn-default"%></a>
+                    | <%= link_to 'submit', submit_path, class:"btn btn-default"%>    
+                  </span>
+                </td>
+                <td style="text-align:right;padding-right:4px;">
+                      <% if current_user != nil %>
+                        <a href="<%= edit_user_registration_path %>"><%= current_user.name %> |</a>
+                        <a href="<%= destroy_user_session_path %>">logout</a>
+                      <% else %>
+                        <a href="<%= user_google_oauth2_omniauth_authorize_path%>">login</a>
+                      <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr id="pagespace" title="New Links" style="height:10px"></tr>
+        <tr>
+          <td>
+            <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+              <%= render "devise/shared/error_messages", resource: resource %>
+              <table border="0" cellpadding="0" cellspacing="0" class="itemlist" style="color:#828282">
+                <tr>
+                  <td>user:</td>
+                  <td><font color="#3c963c"><%= current_user.name %></font></td>
+                </tr>
+                <tr>
+                  <td>created:</td>
+                  <td><%= time_ago_in_words(current_user.created_at)  %> ago</td>
+                </tr>
+                <tr>
+                  <td>karma:</td>
+                  <td><%= current_user.karma %></td>
+                </tr>
+                <tr>
+                  <td>about:</td>
+                  <td><%= f.text_area :about, :cols => 60, :rows => 5,  autofocus: true, autocomplete: "about" %></td>
+                </tr>
+                <tr>
+                  <td>email:</td>
+                  <td><%= f.email_field :email, autofocus: true, autocomplete: "email" %></td>
+                </tr>
+                <tr>
+                  <td>showdead:</td>
+                  <td>
+                    <% if current_user.showdead == "no" %>
+                      <%= f.select(:showdead, options_for_select([['no'],['yes']]))%>
+                    <% else %>
+                      <%= f.select(:showdead, options_for_select([['yes'],['no']]))%>
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>noprocrast:</td>
+                  <td>
+                    <% if current_user.noprocrast == "no" %>
+                      <%= f.select(:noprocrast, options_for_select([['no'],['yes']]))%>
+                    <% else %>
+                      <%= f.select(:noprocrast, options_for_select([['yes'],['no']]))%>
+                    <% end %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>maxvisit:</td>
+                  <td><%= f.number_field :maxvisit%></td>
+                </tr>
+                <tr>
+                  <td>minaway:</td>
+                  <td><%= f.number_field :minaway%></td>
+                </tr>
+                <tr>
+                  <td>delay:</td>
+                  <td><%= f.number_field :delay%></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="#">change password</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="/users/<%= @user.id %>/submitted">submissions</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="#">comments</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="#">hidden</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="#">upvoted submissions</a> / <a href="#">comments</a> (private)</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><a href="#">	favorite submissions</a> / <a href="#">comments</a> (shared)</td>
+                </tr>
+              </table>
+              <div class="actions">
+                <%= f.submit "Update" %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="s.gif" height="10" width="0">
+            <table width="100%" cellspacing="0" cellpadding="1">
+              <tr>
+                <td bgcolor="#ff6600"></td>
+              </tr>
+            </table><br>
+             </td></tr>
+      </table></center>
+      </body>
+      

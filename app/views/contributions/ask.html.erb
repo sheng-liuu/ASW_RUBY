@@ -1,0 +1,133 @@
+<html op="ask">
+  <head>
+    <title>New Links | Hacker News</title>
+  </head>
+  <style type="text/css">
+        a:link, a:visited, a:active {
+            text-decoration:none;
+        }
+    </style>
+  <script>
+	  var i=1;
+	  location.refresh();
+  </script>
+  <body>
+    <center>
+      <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+          <td bgcolor="#ff6600">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <td style="width:18px;padding-right:4px;line-height:1px">
+                  <a href=<%= root_path%>><%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%></a>
+                </td>
+                <td style="line-height:1px">
+                  <span class="pagetop">
+                    <b><a><%= link_to 'Hacker News', root_path, class:"btn btn-default"%></a></b>&nbsp;
+                    <a> <%= link_to 'new', newest_path, class:"btn btn-default"%></a>
+                     <% if current_user != nil %> | <a href="threads?id=<%= current_user.name %>">threads</a> <% end %>
+                    | <a><font color="white"><%= link_to 'ask', ask_path, class:"btn btn-default"%></font></a>
+                    | <%= link_to 'submit', submit_path, class:"btn btn-default"%>           
+                  </span>
+                </td>
+                <td style="text-align:right;padding-right:4px;line-height:1px">
+                  <span class="pagetop">
+                    <% if current_user != nil %>
+                        <a href="/user?id=<%= current_user.name %>"> <font color="black" > <%= current_user.name %> </a>|
+                        <a href="<%= destroy_user_session_path %>">logout </font></a>
+                      <% else %>
+                        <a href="<%= user_google_oauth2_omniauth_authorize_path%>">login</a>
+                    <% end %>   
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr id="pagespace" title="New Links" style="height:10px"></tr>
+        <tr>
+          <td>
+            <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+              <script>while(i < 30 )</script>
+                <% contador_rank = 0 %>
+                <% @contributions.each do |contribution| %>
+                  <% if contribution.nametype == "ask" %>
+                                   <tr>
+                      
+                      <td align="right" valign="top" class="title">
+                        
+                        <span class="rank">
+                          <%= contador_rank += 1 %>.
+                           </span>
+                        <span> <td >
+                          <% if (current_user != nil && contribution.user.id != current_user.id && contribution.voted == false) || current_user == nil  %>
+                       <a> 
+                       <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), point_contribution_path(contribution.id), method: :put%>   </a>
+                        <% elsif contribution.user.id == current_user.id %>
+                          <font color="red">*</font>
+                        <% end %>
+                        <% if contribution.nametype == "url" %> <font color = "black"> <a href= "<%= contribution.url %>" >   <%= contribution.title %> </font>(<%= contribution.url %>) </a>
+                        <% elsif  contribution.nametype == "ask"  %>  <%= link_to contribution.title , {:action => 'show', :id => contribution.id} -%>
+                        <% end %>
+                       </td>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="0"></td>
+                      <td class="subtext">
+                        <span class="numpoints"><%= contribution.points %> points by </span>
+                        <% if contribution.user != current_user %>
+                          <a href="/user?id=<%= contribution.user.name %>"><%= contribution.user.name %></a>
+                        <% else %>
+                          <a href="<%=edit_user_registration_path %>"><%= contribution.user.name %></a>
+                        <% end %>
+                        <a href="item?id=<%= contribution.id %>" > <%= time_ago_in_words(contribution.created_at) %> ago </a>
+                        <% if current_user != nil &&  contribution.user.id != current_user.id && contribution.voted == true %>
+                        <span>
+                          | <%= link_to 'unvote', desvotar_contribution_path(contribution.id), method: :put %>
+                        </span>
+                        <% end %>
+                         <% if current_user == nil && contribution.comments.size == 0  || contribution.comments.size == 0 &&  contribution.user.id != current_user.id %>
+                        <span>
+                          |<a href="item?id=<%= contribution.id %>"> discuss
+                        </span>
+                    
+                        <% elsif  current_user == nil && contribution.comments.size != 0 || contribution.comments.size != 0 &&  contribution.user.id != current_user.id   %>
+                        <span>
+                          |<a href="item?id=<%= contribution.id %>">  <%= contribution.comments.size%> comment
+                        </span>
+                        <% end %>
+                        
+                      </td>
+                    </tr>
+                    <tr class="spacer" style="height:5px"></tr>
+                  <% end %>
+                <% end %>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="s.gif" height="10" width="0">
+            <table width="100%" cellspacing="0" cellpadding="1">
+              <tr>
+                <td bgcolor="#ff6600"></td>
+              </tr>
+            </table><br>
+            <center>
+              <span class="yclinks"><a href="https://news.ycombinator.com/newsguidelines.html">Guidelines</a>
+        | <a href="https://news.ycombinator.com/newsfaq.html">FAQ</a>
+        | <a href="mailto:hn@ycombinator.com">Support</a>
+        | <a href="https://github.com/HackerNews/API">API</a>
+        | <a href="https://news.ycombinator.com/security.html">Security</a>
+        | <a href="https://news.ycombinator.com/lists">Lists</a>
+        | <a href="https://news.ycombinator.com/bookmarklet.html" rel="nofollow">Bookmarklet</a>
+        | <a href="http://www.ycombinator.com/legal/">Legal</a>
+        | <a href="http://www.ycombinator.com/apply/">Apply to YC</a>
+        | <a href="mailto:hn@ycombinator.com">Contact</a></span><br><br><form method="get" action="//hn.algolia.com/">Search:
+          <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
+        </center>
+             </td></tr>
+      </table></center>
+      
+      </body><script type='text/javascript' src='hn.js?QbJiN3cRKlV4dvNUGJpv'></script></html>

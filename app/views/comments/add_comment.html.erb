@@ -1,0 +1,87 @@
+<html op="reply">
+  <head> <title>New Links | Hacker News</title>  </head>
+  <style type="text/css">
+        a:link, a:visited, a:active {
+            text-decoration:none;
+        }
+  </style>
+  <body>
+    <center>
+      <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+          <td bgcolor="#ff6600">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <td style="width:18px;padding-right:4px;line-height:1px">
+                  <a href=<%= root_path%>> <%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%></a>
+                </td>
+                <td style="line-height:1px;  font-size: 10pt;">
+                 <b> Add comment</b>
+                </td>
+                <td style="text-align:right;padding-right:4px;line-height:1px">
+                      <% if current_user != nil %>
+                        <a href="/user?id=<%= current_user.name %>"><%= current_user.name %> </a> |
+                        <a href="<%= destroy_user_session_path %>">logout</a>
+                      <% else %>
+                        <a href="<%= user_google_oauth2_omniauth_authorize_path%>">login</a>
+                      <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr id="pagespace" title="New Links" style="height:10px"></tr>
+        
+          <td>
+            <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+
+        <p id="notice"><%= notice %></p>
+
+          <table class="fatitem" border="0">
+            <tbody>
+
+          
+            <table border='0'>  
+            
+            <tr>    
+<td class="default"><div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
+          
+          <span class="score" <%= @comment.points %> point> 
+                   <% if (current_user != nil && @comment.contribution.user.id != current_user.id && @comment.voted == false) || current_user == nil  %>
+                    <a> <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), point_contribution_path(@comment.contribution.id), method: :put%>
+                  <% else %>
+                  <td class='ind'><img src="s.gif" height="1" width="0"></td><td valign="top" class="votelinks">
+      <center><font color="#ff6600">*</font><br>
+<img src="s.gif" height="1" width="14"></center>    </td>
+                  <% end %>
+          </span> by
+          <a href="/user?id=<%= @comment.user.name %>"><%= @comment.user.name %></a> 
+<span class="age"> <%= link_to time_ago_in_words(@comment.contribution.created_at) + " ago", {:action => 'show', :controller => 'comments', :id => @comment.contribution.id} %></span>       
+<span class="par"> |  <%= link_to "parent", {:action => 'show', :id => @comment.contribution.id} %> </span> 
+                <span class='storyon'> | on: <a href="/item/<%= @comment.contribution.id %>"><%= @comment.contribution.title %> </a></span>
+                 </div></div></td></tr>
+                 </td></tr>
+
+                <!-- AÑADIR DESVOTAR--> 
+              </tr>
+            </tbody>               
+          </table>    
+          <span> <%= @comment.content %>  </span>
+
+            <form method="post" action="/comments">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <textarea name="comment[content]" rows="6" cols="60" required></textarea>
+              <input name="comment[user_id]" style="display: none" value="<%= current_user.id %>"></input>
+              <input name="comment[contribution_id]" style="display: none" value="<%= @comment.contribution.id %>"></input>
+              <input name="comment[comment_id]" style="display: none" value="<%= @comment.id %>"></input>
+
+              <br><br>
+              <input  type="submit" value="reply">
+            </form>
+          <br>
+            
+          </td>
+        </tr>
+      </table></center></tr>
+      </table>
+      </body><script type='text/javascript' src='hn.js?QbJiN3cRKlV4dvNUGJpv'></script></html>

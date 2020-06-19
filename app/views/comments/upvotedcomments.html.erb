@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title>New Links | Hacker News</title>
+  </head>
+  <style type="text/css">
+        a:link, a:visited, a:active {
+            text-decoration:none;
+        }
+    </style>
+  <script>
+	  var i=1;
+	  location.refresh();
+  </script>
+
+  <body>
+    <center>
+      <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+          <td bgcolor="#ff6600">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding:2px">
+              <tr>
+                <td style="width:18px;padding-right:4px">
+                  <a href=<%= root_path%>> <%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%></a>
+                </td>
+                <td style="line-height:12pt; height:10px;">
+                  <span class="pagetop">
+                    <b><a><%= link_to 'Hacker News', contributions_path, class:"btn btn-default"%></a></b>
+                    <a> <%= link_to 'new', newest_path, class:"btn btn-default"%></a>
+                    <% if current_user != nil %> | <a href="threads?id=<%= current_user.name %>" >threads</a> <% end %>
+                    | <a><%= link_to 'ask', ask_path, class:"btn btn-default"%></a>
+                    | <%= link_to 'submit', submit_path, class:"btn btn-default"%>       
+                    | <a style="color:white;">upvoted</a>       
+                  </span>
+                </td>
+                <td style="text-align:right;padding-right:4px;">
+                      <% if current_user != nil %>
+                        <a href="/user?id=<%= current_user.name %>"><%= current_user.name %> </a>|
+                        <a href="<%= destroy_user_session_path %>">logout</a>
+                      <% else %>
+                        <a href="<%= user_google_oauth2_omniauth_authorize_path%>">login</a>
+                      <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr id="pagespace" title="New Links" style="height:10px"></tr>
+        <tr>
+          <td>
+      
+            <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+             
+              <script>while(i < 30)</script>
+                <% contador_rank = 0 %>
+                <% @comments.each do |comment| %>
+                <tr id="pagespace" title="Upvoted comments" style="height:10px"></tr><tr>
+              <% if comment.voted  and comment.user.id != current_user.id%>
+      </td><td class="default">
+        <div style="margin-top:2px; margin-bottom:-10px;"><span class="comhead">
+         <a href="/user?id=<%= comment.user.name %>"><%= comment.user.name %></a><span class="age">
+            <a <%= link_to time_ago_in_words(comment.contribution.created_at) + " ago", {:action => 'show', :id => comment.contribution.id} %></a></span> <span id="unv_22867664"></span><span class="par"> | 
+            <a <%= link_to "parent", {:action => 'show', :id => comment.contribution.id} %> </a></span> <a class="togg" n="2" href="javascript:void(0)" onclick="return toggle(event, 22867664)"></a>      
+            <span class='storyon'> | on: <a href="/contributions/<%= comment.contribution.id %>"><%= comment.contribution.title %></a></span>
+                  </span></div><br><div class="comment">
+                  <span class="commtext c00"> <%= comment.content %></span>
+              
+                <% end %>
+              <% end %>
+            
+          </td>
+        </tr>
+   
+        <tr>
+          <td>
+            <img src="s.gif" height="10" width="0">
+            <table width="100%" cellspacing="0" cellpadding="1">
+              <tr>
+                <td bgcolor="#ff6600"></td>
+              </tr>
+            </table><br>
+            <center>
+              <span class="yclinks"><a href="https://news.ycombinator.com/newsguidelines.html">Guidelines</a>
+        | <a href="https://news.ycombinator.com/newsfaq.html">FAQ</a>
+        | <a href="mailto:hn@ycombinator.com">Support</a>
+        | <a href="https://github.com/HackerNews/API">API</a>
+        | <a href="https://news.ycombinator.com/security.html">Security</a>
+        | <a href="https://news.ycombinator.com/lists">Lists</a>
+        | <a href="https://news.ycombinator.com/bookmarklet.html" rel="nofollow">Bookmarklet</a>
+        | <a href="http://www.ycombinator.com/legal/">Legal</a>
+        | <a href="http://www.ycombinator.com/apply/">Apply to YC</a>
+        | <a href="mailto:hn@ycombinator.com">Contact</a></span><br><br><form method="get" action="//hn.algolia.com/">Search:
+          <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
+        </center>
+             </td></tr>
+      </table></center>
+      
+      </body><script type='text/javascript' src='hn.js?QbJiN3cRKlV4dvNUGJpv'></script></html>

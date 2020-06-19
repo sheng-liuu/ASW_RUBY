@@ -1,0 +1,1 @@
+json.extract! contribution, :id, :title, :url, :text, :points, :nametype, :user_id, :voted, :created_at, :updated_at, :user_name

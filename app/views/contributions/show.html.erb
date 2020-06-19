@@ -1,0 +1,241 @@
+              <%
+                def draw_tree(node)
+                  node.comments.each do |child|
+              %>
+                <li> 
+                  <span >
+                  <% if (current_user != nil && child.user.id != current_user.id && child.voted == false) || current_user == nil  %>
+                    <a> <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), vote_comment_path(child.id), method: :put%>
+                    </a >
+                  <% end %>                    
+                   <span >
+                   <a href="/user?id=<%= child.user.name %>"> <%= child.user.name %> </a></span> 
+                     | <%= link_to time_ago_in_words(child.created_at)+" ago", {:action => 'show', :controller => 'comments', :id => child.id} %>
+                  </span>
+                  <% if current_user != nil &&  child.user.id != current_user.id && child.voted == true %>
+                    <span>
+                    | <%= link_to 'unvote', unvote_comment_path(child.id), method: :put %>
+                    </span>
+                  <% end %>
+                  <br> 
+                  <%= child.content %>
+                  <span >
+                    <u><p> <%= link_to "reply", {:action => 'add_comment', :controller => 'comments' , :id => child.id} %> </p> </u>
+                  </span>
+                  <% if child.comments.any? %>
+                  <ul style="list-style-type:none;"><% draw_tree(child) %></ul>
+                  <% end %>
+                </li>
+              <%
+                  end; nil
+                end
+              %>     
+
+<html op="item">
+  <head> <title>New Links | Hacker News</title>  </head>
+  <style type="text/css">
+        a:link, a:visited, a:active {
+            text-decoration:none;
+        }
+  </style>
+  <body>
+    <center>
+      <table id="hnmain" border="0" cellpadding="0" cellspacing="0" width="85%" bgcolor="#f6f6ef">
+        <tr>
+          <td bgcolor="#ff6600">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+              <tr>
+                <td style="width:18px;padding-right:4px;line-height:1px">
+                  <a href=<%= root_path%>> <%= image_tag(src = "y18.gif", size: "18x18", style: "border:1px white solid;", :alt => "rss feed") -%></a>
+                </td>
+                <td style="line-height:1px">
+                  <span class="pagetop">
+                    <b><a><%= link_to 'Hacker News', root_path, class:"btn btn-default"%></a></b>
+                    <a> <%= link_to 'new', newest_path, class:"btn btn-default"%></a>
+                     <% if current_user != nil %> | <a href="/threads?id=<%= current_user.name %>" >threads</a> <% end %>
+                    | <a href="front">past</a> 
+                    | <%= link_to 'comments', newcomments_path, class:"btn btn-default"%>        
+                    | <a><%= link_to 'ask', ask_path, class:"btn btn-default"%></a>
+                    | <%= link_to 'submit', submit_path, class:"btn btn-default"%>           
+                  </span>
+                </td>
+                <td style="text-align:right;padding-right:4px;line-height:1px">
+                      <% if current_user != nil %>
+                        <a href="/user?id=<%= current_user.name %>"><%= current_user.name %> </a> |
+                        <a href="<%= destroy_user_session_path %>">logout</a>
+                      <% else %>
+                        <a href="<%= user_google_oauth2_omniauth_authorize_path%>">login</a>
+                      <% end %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr id="pagespace" title="New Links" style="height:10px"></tr>
+    <tr>
+      <td>
+        <table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+         
+          <p id="notice"><%= notice %></p>
+         
+          <table class="fatitem" border="0">
+            <tbody>
+              <tr class="athing" id="22834640">
+                <td valign="top" class="votelinks">
+                  <% if (current_user != nil && @contribution.user.id != current_user.id && @contribution.voted == false) || current_user == nil  %>
+                   <center>
+                     <div class='votearrow' title='upvote'></div>
+                     <a> <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), point_contribution_path(@contribution.id), method: :put%> </a>
+                    </center>
+                  <% end %>
+                </td>
+                <% if @contribution.nametype == "ask" %>
+                <td class="title"><%= link_to @contribution.title , {:action => 'show', :id => @contribution.id}%></td>
+                <% elsif @contribution.nametype == "url" %>
+                <td class="title"><a href=<%= @contribution.url %> > <%= @contribution.title %> </a></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td colspan="0"></td>
+                <td class="subtext">
+                  <span class="score"> <%=  @contribution.points %> points by 
+                  <a href="/users/<%=  @contribution.user.id %>/show" class="hnuser"><%=  @contribution.user.name %> 
+                  <%= link_to time_ago_in_words(@contribution.created_at) + " ago", {:action => 'show', :id => @contribution.id} %> </a> </span>
+                
+                  <% if current_user != nil &&  @contribution.user.id != current_user.id && @contribution.voted == true %>
+                  <span>
+                    | <%= link_to 'Unvote', desvotar_contribution_path(@contribution.id), method: :put %>
+                  </span>
+                  <% end %>
+                  <% if current_user != nil && @contribution.user.id == current_user.id%>
+                  <span>
+                    | <%= link_to ' edit', edit_contribution_path(@contribution) %>
+                      
+                  </span>
+                  <% end %>
+                </td>
+                <tr> 
+              
+                  <table>
+                    
+                <td colspan="2">
+                  <% if @contribution.url == nil %>
+                <a href=""> <%= @contribution.text %> </a</td>
+                <% end %>
+              </tr>
+            
+          
+            </tbody>
+          </table> 
+          
+          <% if current_user == nil ||  @contribution.user.id != current_user.id %>
+            <form method="post" action="/comments">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <textarea name="comment[content]" rows="6" cols="60" required></textarea>
+              <% if current_user != nil %> <input name="comment[user_id]" style="display: none" value="<%= current_user.id %>"></input> <%end%>
+              <input name="comment[contribution_id]" style="display: none" value="<%= @contribution.id %>"></input>
+              <br><br>
+              <input  type="submit" value="add comment">
+            </form>
+            <% end %>
+          <br>
+  
+              <table>
+              
+                <tr>
+                <% @contribution.comments.each do |comment| %>           
+                <% if comment.comment_id.nil?%>
+                  
+                   <table border="0" class='comment-tree'>
+                    <tr class='athing comtr ' id='22890523'>
+                    <td>
+                    <table border='0'>
+                      <tr>
+                        <td class='ind'><img src="s.gif" height="1" width="0"></td>
+                        <td valign="top" class="votelinks">
+                          <% if (current_user != nil && comment.user.id != current_user.id && comment.voted == false) || current_user == nil  %>
+                          <div class='votearrow' title='upvote'></div>
+                          <a> <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), vote_comment_path(comment.id), method: :put%></a>
+                          <% end %>
+                          <a href="/user?id=<%= comment.user.name %>"><%= comment.user.name %></a>
+                          <span class="age">
+                            <a <%= link_to time_ago_in_words(comment.created_at) + " ago", {:action => 'show', :controller => 'comments' , :id => comment.id} %> </a>
+                          </span>
+                          <% if current_user != nil &&  comment.user.id != current_user.id && comment.voted == true %>
+                            <span>
+                            | <%= link_to 'unvote', unvote_comment_path(comment.id), method: :put %>
+                            </span>
+                          <% end %>
+                          <span class="par"></span> <a class="togg" n="89" href="javascript:void(0)" onclick="return toggle(event, 22890523)"></a>         
+                          <span class='storyon'></span>
+                          </span></div><br>
+                          <div class="comment">
+                          <span class="commtext c00"><%= comment.content %> </span>
+                          <div class='reply'>        <p><font size="1">
+                          <u><a  <%= link_to "reply", {:action => 'add_comment', :controller => 'comments' , :id => comment.id} %> </a></u>
+                          </font>
+                          </div></div>
+                        </td>
+                      </tr>
+                    </table>
+                    </td>
+                    </tr>
+                  </tr>
+                  <tr>
+                  <table>
+                    <ul style="list-style-type:none;">
+                      <% comment.comments.each do |node| %>
+                        <li>
+                          <span>
+                            <% if (current_user != nil && node.user.id != current_user.id && node.voted == false) || current_user == nil  %>
+                            <a> <%= link_to image_tag(src = "vote.png", size: "10x10", :alt => "rss feed"), vote_comment_path(node.id), method: :put%>
+                            </a >
+                          <% end %>
+                          <%= node.user.name %> | <%= link_to time_ago_in_words(node.created_at)+" ago", {:action => 'show', :controller => 'comments' , :id => node.id} %>
+                          </span>
+                          <% if current_user != nil &&  node.user.id != current_user.id && node.voted == true %>
+                            <span>
+                            | <%= link_to 'unvote', unvote_comment_path(node.id), method: :put %>
+                            </span>
+                          <% end %>
+                          <br> 
+                          <%= node.content %>
+                          <span>
+                            <u><p> <%= link_to "reply", {:action => 'add_comment',:controller=>"comments", :id => node.id} %> </p> </u>
+                          </span>
+                          <% if node.comments.any? %>
+                            <ul style="list-style-type:none;"><%= draw_tree(node) %></ul>
+                          <% end %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </tr>
+                <% end %>
+                <% end %>
+                </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="s.gif" height="10" width="0">
+            <table width="100%" cellspacing="0" cellpadding="1">
+              <tr><td bgcolor="#ff6600"></td></tr>
+            </table>
+            <br>
+            <center>
+              <span class="yclinks"><a href="https://news.ycombinator.com/newsguidelines.html">Guidelines</a>
+        | <a href="https://news.ycombinator.com/newsfaq.html">FAQ</a>
+        | <a href="mailto:hn@ycombinator.com">Support</a>
+        | <a href="https://github.com/HackerNews/API">API</a>
+        | <a href="https://news.ycombinator.com/security.html">Security</a>
+        | <a href="https://news.ycombinator.com/lists">Lists</a>
+        | <a href="https://news.ycombinator.com/bookmarklet.html" rel="nofollow">Bookmarklet</a>
+        | <a href="http://www.ycombinator.com/legal/">Legal</a>
+        | <a href="http://www.ycombinator.com/apply/">Apply to YC</a>
+        | <a href="mailto:hn@ycombinator.com">Contact</a></span><br><br><form method="get" action="//hn.algolia.com/">Search:
+          <input type="text" name="q" value="" size="17" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="false"></form>
+        </center>
+             </td></tr>
+      </table></center>
+      
+      </body><script type='text/javascript' src='hn.js?QbJiN3cRKlV4dvNUGJpv'></script></html>
